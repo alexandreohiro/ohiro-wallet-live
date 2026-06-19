@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cadastro | Ohiro Wallet</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    body { background: #070a16; color: #f5f7fb; }
+    main { max-width: 480px; margin-top: 10vh; }
+    article { background: #111827; border: 1px solid #253044; }
+    input { background: #1f2937 !important; color: #fff !important; }
+    .error { color: #fb7185; }
+  </style>
+</head>
+<body>
+  <main class="container">
+    <article>
+      <h2>criar conta</h2>
+      {% if has_error %}<p class="error">{{ error }}</p>{% endif %}
+      <form action="/register" method="post">
+        <input name="name" placeholder="nome" required>
+        <input name="username" placeholder="username" required>
+        <input name="password" type="password" placeholder="password" required>
+        <button type="submit">submit</button>
+      </form>
+      <p><a href="/login">voltar para login</a></p>
+    </article>
+  </main>
+</body>
+</html>

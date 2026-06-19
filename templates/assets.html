@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Assets | Ohiro Wallet</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+  <style>
+    body { background: #050816; color: #f8fafc; }
+    main { max-width: 980px; padding-top: 4rem; }
+    .top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+    .card { background: #111827; border: 1px solid #293244; border-radius: 16px; padding: 1rem; margin-bottom: 1rem; }
+    .row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 1rem; align-items: center; }
+    .sub { color: #94a3b8; font-size: .85rem; }
+    .positive { color: #5eead4; }
+    .negative { color: #fb7185; }
+    input, select { background: #1f2937 !important; color: #fff !important; }
+    dialog article { background: #111827; border: 1px solid #293244; }
+    .actions { display:flex; gap:.8rem; align-items:center; }
+    .error { color:#fb7185; }
+  </style>
+</head>
+<body>
+<main class="container">
+  <div class="top">
+    <h1>assets</h1>
+    <p>welcome, {{ user_name }}</p>
+  </div>
+
+  {% if has_error %}<p class="error">{{ error }}</p>{% endif %}
+
+  <div class="row sub">
+    <span>NAME</span><span>QUANTITY</span><span>UNIT VALUE</span><span>CHANGE</span>
+  </div>
+
+  {% for asset in assets %}
+  <section class="card">
+    <div class="row">
+      <strong>{{ asset.name }}</strong>
+      <span>{{ asset.quantity }}</span>
+      <span>{{ asset.unit_value }}</span>
+      {% if asset.change_is_positive %}
+        <span class="positive">{{ asset.change }}</span>
+      {% else %}
+        <span class="negative">{{ asset.change }}</span>
+      {% endif %}
+    </div>
+    {% if asset.purchases.len() > 0 %}
+    <hr>
+    <div class="row sub">
+      <span>purchase date</span><span>quantity</span><span>bought for</span><span>change</span>
+    </div>
+    {% for purchase in asset.purchases %}
+    <div class="row sub">
+      <span>{{ purchase.purchase_date }}</span>
+      <span>{{ purchase.quantity }}</span>
+      <span>{{ purchase.bought_for }}</span>
+      {% if purchase.change_is_positive %}
+        <span class="positive">{{ purchase.change }}</span>
+      {% else %}
+        <span class="negative">{{ purchase.change }}</span>
+      {% endif %}
+    </div>
+    {% endfor %}
+    {% endif %}
+  </section>
+  {% endfor %}
+
+  <div class="actions">
+    <button onclick="document.getElementById('purchase-modal').showModal()">register purchase</button>
+    <button class="secondary" onclick="document.getElementById('asset-modal').showModal()">new asset</button>
+    <form action="/logout" method="post"><button class="contrast" type="submit">logout</button></form>
+  </div>
+</main>
+
+<dialog id="purchase-modal">
+  <article>
+    <h3>register purchase</h3>
+    <form action="/purchases" method="post">
+      <label>asset
+        <select name="asset_id" required>
+          {% for asset in assets %}
+            <option value="{{ asset.id }}">{{ asset.name }}</option>
+          {% endfor %}
+        </select>
+      </label>
+      <label>unit value <input name="unit_value" placeholder="10.00" required></label>
+      <label>quantity <input name="quantity" placeholder="5" required></label>
+      <div class="actions"><button type="button" class="secondary" onclick="document.getElementById('purchase-modal').close()">cancel</button><button type="submit">submit</button></div>
+    </form>
+  </article>
+</dialog>
+
+<dialog id="asset-modal">
+  <article>
+    <h3>new asset</h3>
+    <form action="/assets" method="post">
+      <label>name <input name="name" placeholder="Tesouro" required></label>
+      <label>unit value <input name="unit_value" placeholder="100.00" required></label>
+      <div class="actions"><button type="button" class="secondary" onclick="document.getElementById('asset-modal').close()">cancel</button><button type="submit">submit</button></div>
+    </form>
+  </article>
+</dialog>
+</body>
+</html>
