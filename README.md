@@ -28,7 +28,7 @@ cargo run
 Acesse:
 
 ```text
-http://127.0.0.1:4000
+http://127.0.0.1:3000
 ```
 
 Usuário demo:
@@ -54,13 +54,13 @@ O arquivo `.env` não deve ser versionado. Use `.env.example` como modelo de con
 ## API
 
 ```bash
-curl http://127.0.0.1:4000/api/assets -H "x-api-key: dev-secret"
+curl http://127.0.0.1:3000/api/assets -H "x-api-key: dev-secret"
 ```
 
 Criar ativo:
 
 ```bash
-curl -X POST http://127.0.0.1:4000/api/assets \
+curl -X POST http://127.0.0.1:3000/api/assets \
   -H "Content-Type: application/json" \
   -H "x-api-key: dev-secret" \
   -d '{"name":"Tesouro","unit_value_cents":10000}'
